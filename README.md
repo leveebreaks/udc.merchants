@@ -26,6 +26,6 @@ To run the application locally, follow the steps below.
 
 ⚠️ The first run may take a few minutes as the containers are built and dependencies are installed.  
 ⚠️ In case of connection issues with the database (e.g. login failures or EF Core migration errors), try stopping the containers and rebuilding:  
-    ```powershell
-    docker-compose down
-    docker-compose up --build
+   ```powershell  
+   docker-compose down  
+   docker-compose up --build  
