@@ -1,0 +1,39 @@
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: merchant-sql-db
+    environment:
+      SA_PASSWORD: "YourStrong!Passw0rd"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql
+
+  backend:
+    build:
+      context: ./merchants
+      dockerfile: Dockerfile
+    container_name: merchant-backend
+    ports:
+      - "5297:5297"
+    depends_on:
+      - db
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Server=db;Database=MerchantDb;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True;"
+    command: dotnet run --urls=http://0.0.0.0:5297
+
+  frontend:
+    build:
+      context: ./merchants-app
+      dockerfile: Dockerfile
+    container_name: merchant-frontend
+    ports:
+      - "4200:4200"
+    depends_on:
+      - backend
+    command: ng serve --host 0.0.0.0 --port 4200
+
+volumes:
+  mssql_data:

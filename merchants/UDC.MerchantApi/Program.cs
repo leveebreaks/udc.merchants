@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using FluentValidation;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
 using UDC.MerchantApi.Domain;
 using UDC.MerchantApi.Features.Merchants;
@@ -48,7 +49,10 @@ app.UseCors();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    app.MapScalarApiReference();
+    app.MapScalarApiReference(options =>
+    {
+        options.Servers = new List<ScalarServer>() { new ScalarServer("http://localhost:5297") };
+    });
 }
 
 //app.UseHttpsRedirection();
